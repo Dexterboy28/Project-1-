@@ -1,12 +1,9 @@
-# Pin to stable Debian
 FROM python:3.9-slim-bookworm
 
 WORKDIR /app
 
-# Prevent apt from hanging in CI
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies safely
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc \
@@ -14,11 +11,12 @@ RUN apt-get update && \
         pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file to leverage Docker cache 
-COPY requirements.txt 
-# Install Python dependencies 
+# MUST have source + destination
+COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
+# MUST have source + destination
 COPY . .
 
 EXPOSE 5000
