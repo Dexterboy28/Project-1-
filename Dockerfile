@@ -14,7 +14,10 @@ RUN apt-get update && \
         pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir 
+# Copy the requirements file to leverage Docker cache 
+COPY requirements.txt 
+# Install Python dependencies 
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
